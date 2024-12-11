@@ -10,7 +10,7 @@ using UnityEngine.AI;
 //2
 // make the script require a NavMeshAgent component
 [RequireComponent(typeof(NavMeshAgent))]
-public class PlayerNavigationScript : MonoBehaviour
+public class CharacterMovement : MonoBehaviour
 {
 	//3
 	/// <summary>
@@ -36,6 +36,10 @@ public class PlayerNavigationScript : MonoBehaviour
         if(Input.GetMouseButton(0))
 			//10
 			GetPlayerDestination();
+		if(Input.GetKeyDown(KeyCode.F))
+			SpherecastCheck();
+		if (Input.GetMouseButton(1))
+			Turning();
 	}
 
 	//5
@@ -66,6 +70,28 @@ public class PlayerNavigationScript : MonoBehaviour
 		{
 			//Instantiate(particle, this.transform.position, this.transform.rotation);
 			Destroy(this.gameObject);
+		}
+	}
+
+	void SpherecastCheck()
+	{
+		Debug.DrawRay(transform.position, transform.forward*5, Color.yellow, 5);
+
+		if (Physics.SphereCast(transform.position, 3f, transform.forward, out RaycastHit hit))
+		{
+			Debug.Log(hit);
+		}
+	}
+
+	void Turning()
+	{
+		Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+		// if the click lands on a physical object
+		if (Physics.Raycast(mouseRay, out RaycastHit hitInfo, Mathf.Infinity))
+		{
+			// rotate the character to face the point
+			this.transform.LookAt(hitInfo.point);
 		}
 	}
 }

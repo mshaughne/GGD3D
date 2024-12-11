@@ -26,6 +26,8 @@ public class EnemyNavigationScript : MonoBehaviour
 	// the distance at which the enemy will continue following
 	public float maxPlayerDistance;
 
+
+
 	//a1
 	/// <summary>
 	/// All of the possible states the enemy can be in
@@ -50,7 +52,10 @@ public class EnemyNavigationScript : MonoBehaviour
 				// calculate a new patrol destination by taking the current pos and adding a random value in the patrol range
 				patrolDestination = this.transform.position + new Vector3(Random.Range(-patrolRange, patrolRange), 0, Random.Range(-patrolRange, patrolRange));
 			else if (value == EnemyStates.Attack)
-				attackCooldownCounter = 0;
+			{
+                attackCooldownCounter = 0;
+            }
+				
 
 			// set the current state
 			_currentState = value;
@@ -102,6 +107,10 @@ public class EnemyNavigationScript : MonoBehaviour
 	/// the counter for attackCooldown
 	/// </summary>
 	private float attackCooldownCounter = 0;
+
+	[Header("Particle Settings")]
+	[SerializeField]
+	GameObject attackParticle;
 
 	// Start is called before the first frame update
 	void Start()
@@ -252,6 +261,7 @@ public class EnemyNavigationScript : MonoBehaviour
 		if(attackCooldownCounter >= attackCooldown)
 		{
 			Debug.Log("ATTACKED " + target.name);
+			Instantiate(attackParticle, this.transform.position, this.transform.rotation);
 			attackCooldownCounter = 0;
 		}
 	}
